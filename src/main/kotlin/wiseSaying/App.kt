@@ -21,7 +21,7 @@ fun App() {
         when (order[0]) {
             "종료" -> break
             "등록" -> AppConfig.wiseSayingController.enroll()
-            "목록" -> AppConfig.wiseSayingController.list(order[1])
+            "목록" -> AppConfig.wiseSayingController.list(order.getOrNull(1))
             "삭제" -> AppConfig.wiseSayingController.remove(order[1])
             "수정" -> AppConfig.wiseSayingController.update(order[1])
             "빌드" -> AppConfig.wiseSayingController.build()

@@ -18,24 +18,29 @@ class WiseSayingController(
         println("${AppConfig.number}번 명언이 등록되었습니다.")
     }
 
-    fun list(order: String) {
+    fun list(order: String?) {
         val (keywordType, keyword, page) = Rq().split(order)
 
         if (keywordType != null) { // keyword로 목록 페이징 출력
             println("----------------------")
             println("검색타입 : $keywordType")
-            println("검색어 :  $keyword")
+            println("검색어 : $keyword")
             println("----------------------")
         }
 
         println("번호 / 작가 / 명언")
         println("----------------------")
 
-        val wiseList = wiseSayingService.list(keywordType, keyword, page)
-        wiseList.forEach { println("${it.id} / ${it.content} / ${it.author}") }
+        val pair = wiseSayingService.list(keywordType, keyword, page)
+        pair.first.forEach { println("${it.id} / ${it.content} / ${it.author}") }
 
         println("----------------------")
         print("페이지 : ")
+        for (i in 1..pair.second) {
+            if (i == page.toInt()) print("[${i}]") else print("${i}")
+            if (i != pair.second) print(" / ")
+        }
+        println()
     }
 
     fun remove(order: String) {

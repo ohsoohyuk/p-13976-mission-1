@@ -17,7 +17,7 @@ class WiseSayingService(
         wiseSayingRepository.update(wiseSaying)
     }
 
-    fun list(keywordType: String?, keyword: String?, page: String) : List<WiseSaying> {
+    fun list(keywordType: String?, keyword: String?, page: String) : Pair<List<WiseSaying>, Int> {
         return wiseSayingRepository.getList(keywordType, keyword, page)
     }
 

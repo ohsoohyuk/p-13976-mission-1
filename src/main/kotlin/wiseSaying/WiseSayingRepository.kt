@@ -13,12 +13,26 @@ class WiseSayingRepository {
         AppConfig.fileIO.update(wiseSaying)
     }
 
-    fun getList(keywordType: String?, keyword: String?, page: String) : List<WiseSaying> {
+    fun getList(keywordType: String?, keyword: String?, page: String) : Pair<List<WiseSaying>, Int> {
+        if (keywordType == "content") {
+            return AppConfig.fileIO.findAll()
+                .filter { it.content?.contains(keyword.orEmpty()) == true }
+                .reversed()
+                .let { filtered ->
+                    val totalPages = (filtered.size + 5 - 1) / 5
+                    filtered.drop((page.toInt() - 1) * 5)
+                        .take(5) to totalPages
+                }
+        }
+
         return AppConfig.fileIO.findAll()
-            .filter { it.content?.contains(keyword.orEmpty()) == true } // null 안전 처리
+            .filter { it.author?.contains(keyword.orEmpty()) == true }
             .reversed()
-            .drop((page.toInt() - 1) * 5) // 이전 페이지 건너뛰기
-            .take(5) // 5개 가져오기
+            .let { filtered ->
+                val totalPages = (filtered.size + 5 - 1) / 5
+                filtered.drop((page.toInt() - 1) * 5)
+                    .take(5) to totalPages
+            }
     }
 
     fun build() {
